@@ -1,0 +1,25 @@
+---
+- hosts: all
+  become: true
+  tasks:
+
+
+
+  - name: buildingg docker image
+    command: docker build -t simple-devops-image .
+    args:
+      chdir: /opt/docker
+
+  - name: login to docker hub
+    command: docker login
+
+  - name: Tag and push to docker hub
+    docker_image:
+      name: simple-devops-image
+      repository: 208996231/simple-devops-image
+      tag: latest
+      push: yes
+
+  - name: remove docker images from ansible sever
+    command: docker rmi simple-devops-image 208996231/simple-devops-image
+    ignore_errors: yes
